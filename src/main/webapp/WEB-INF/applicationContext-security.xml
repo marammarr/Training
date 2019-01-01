@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- - Application context containing authentication, channel - security 
+	and web URI beans. - - Only used by "filter" artifact. - -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:b="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+
+	<!-- <http pattern="/api/**" auto-config="false" use-expressions="true">
+		<intercept-url pattern="/**" access="hasRole('ROLE_APICLIENT')" />
+		<http-basic entry-point-ref="authenticationEntryPoint" />
+		<access-denied-handler error-page="/403.html" />
+		<csrf disabled="true"/>
+	</http>-->
+
+	<http auto-config="false" use-expressions="true">
+		<intercept-url pattern="/" access="permitAll()" />
+		<intercept-url pattern="/index.jsp" access="permitAll()" />
+		<intercept-url pattern="/403.html" access="permitAll()"/>
+		<intercept-url pattern="/assets/**" access="permitAll()" />
+		<intercept-url pattern="/login.html" access="permitAll()" />
+		<!-- <intercept-url pattern="/**" access="isAuthenticated()"/>-->
+		<intercept-url pattern="/api/**" access="permitAll()"/>
+		<intercept-url pattern="/api/user/**" access="permitAll()"/>
+
+		<!-- access denied page -->
+		<access-denied-handler error-page="/403.html" />
+
+		<form-login login-page="/login.html"
+		    default-target-url="/home.html"
+			username-parameter="username"
+			password-parameter="password"
+			login-processing-url="/j_spring_security_check"
+			authentication-failure-url="/login.html?error" />
+		
+		<logout logout-url="/j_spring_security_logout" logout-success-url="/login.html" />
+		
+		<!-- 
+		<remember-me
+			remember-me-parameter="_spring_security_remember_me" 
+			remember-me-cookie="SPRING_SECURITY_REMEMBER_ME_COOKIE" />
+		-->
+		
+		<!-- enable csrf protection -->
+		<csrf disabled="true"/>
+	</http>
+
+	<authentication-manager id="authenticationManager">
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="SELECT USERID,PASSWORD,1 AS ENABLED FROM T_USER WHERE USERID=?"
+				authorities-by-username-query="SELECT DISTINCT U.USERID, R.ROLE FROM  T_USER U, T_ROLE R WHERE U.USERID=R.USERID AND U.USERID=?" />
+		</authentication-provider>
+	</authentication-manager>
+	
+	<b:bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+		<b:property name="realmName" value="admin realm" />
+	</b:bean>
+</b:beans>

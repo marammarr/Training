@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+	<!--
+	     spring akan mencari class-class controller pada package yang ditentukan dibawah ini
+	     untuk kemudian di-load oleh spring, di contoh kita ini adalah package
+	     xsis.extend.java.controller
+	-->
+	<!--  <context:component-scan base-package="com.jafis.learn.sia.web" />-->
+	<context:component-scan base-package="com.jafis.learn.sia.web" />
+	<mvc:annotation-driven />
+	<mvc:resources mapping="/assets/**" location="/assets/" />
+	
+	<!-- 
+	     bean ini mendefinisikan file-file yang akan digunakan untuk fungsi view (dalam
+	     contoh ini menggunakan file .jsp yang diletakkan pada folder /WEB-INF/views)
+	 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+</beans>
